@@ -1,0 +1,449 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:32:29 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1522884804879_-221307662",
+      "id": "20180404-163324_1004741823",
+      "dateCreated": "Apr 4, 2018 4:33:24 PM",
+      "dateStarted": "Apr 19, 2018 10:32:29 PM",
+      "dateFinished": "Apr 19, 2018 10:32:29 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val badwords \u003d spark.read.text(\"./code/password-data/helper-data/badwords.txt\")",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:32:31 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "badwords: org.apache.spark.sql.DataFrame \u003d [value: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524181422136_1329581553",
+      "id": "20180419-164342_1719299808",
+      "dateCreated": "Apr 19, 2018 4:43:42 PM",
+      "dateStarted": "Apr 19, 2018 10:32:31 PM",
+      "dateFinished": "Apr 19, 2018 10:32:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val plaintextdumps \u003d spark\n  .read\n  .text(\"./code/password-data/plaintextdumps/*\")\n\nval plainpasswords: Dataset[String] \u003d plaintextdumps.join(\n  badwords,\n  plaintextdumps(\"value\").contains(badwords(\"value\")),\n  \"left_anti\"\n).select(plaintextdumps(\"value\")).as[String]\n\nplaintextdumps.count()\nbadwords.count()\nplainpasswords.count()",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:32:33 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "plaintextdumps: org.apache.spark.sql.DataFrame \u003d [value: string]\nplainpasswords: org.apache.spark.sql.Dataset[String] \u003d [value: string]\nres177: Long \u003d 999999\nres178: Long \u003d 64\nres179: Long \u003d 979658\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524181939790_-856429237",
+      "id": "20180419-165219_359824913",
+      "dateCreated": "Apr 19, 2018 4:52:19 PM",
+      "dateStarted": "Apr 19, 2018 10:32:33 PM",
+      "dateFinished": "Apr 19, 2018 10:32:36 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class PasswordHash(pwnedhash: String, count: Int)\n\nval pwnedpasswords: Dataset[PasswordHash] \u003d spark\n  .read\n  .text(\"./code/password-data/pwnedpasswords/*\")\n  .as[String]\n  .map { line \u003d\u003e\n    val Array(password, count) \u003d line.trim.split(\":\")\n    PasswordHash(password, count.toInt)\n  }\n\npwnedpasswords.show()",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:32:38 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class PasswordHash\npwnedpasswords: org.apache.spark.sql.Dataset[PasswordHash] \u003d [pwnedhash: string, count: int]\n+--------------------+--------+\n|           pwnedhash|   count|\n+--------------------+--------+\n|7C4A8D09CA3762AF6...|20760336|\n|F7C3BC1D808E04732...| 7016669|\n|B1B3773A05C0ED017...| 3599486|\n|5BAA61E4C9B93F3F0...| 3303003|\n|3D4F2BF07DC1BE38B...| 2900049|\n|7C222FB2927D828AF...| 2680521|\n|6367C48DD193D56EA...| 2670319|\n|E38AD214943DAAD1D...| 2310111|\n|20EABE5D64B0E2167...| 2298084|\n|8CB2237D0679CA88D...| 2088998|\n|01B307ACBA4F54F55...| 2075018|\n|601F1889667EFAEBB...| 2048411|\n|C984AED014AEC7623...| 1832944|\n|EE8D8728F435FD550...| 1462146|\n|7110EDA4D09E062AA...| 1143408|\n|B80A9AED8AF17118E...| 1109333|\n|B0399D2029F64D445...| 1028295|\n|40BD001563085FC35...|  977827|\n|AB87D24BDC7452E55...|  932064|\n|360E46F15F432AF83...|  928360|\n+--------------------+--------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1522884880176_-226001270",
+      "id": "20180404-163440_838714863",
+      "dateCreated": "Apr 4, 2018 4:34:40 PM",
+      "dateStarted": "Apr 19, 2018 10:32:38 PM",
+      "dateFinished": "Apr 19, 2018 10:32:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "plainpasswords.show()",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:32:43 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------+\n|     value|\n+----------+\n|    123456|\n|  password|\n|  12345678|\n|    qwerty|\n| 123456789|\n|     12345|\n|      1234|\n|    111111|\n|   1234567|\n|    dragon|\n|    123123|\n|  baseball|\n|    abc123|\n|  football|\n|    monkey|\n|   letmein|\n|    shadow|\n|    master|\n|    666666|\n|qwertyuiop|\n+----------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524202287480_1371208437",
+      "id": "20180419-223127_1437457669",
+      "dateCreated": "Apr 19, 2018 10:31:27 PM",
+      "dateStarted": "Apr 19, 2018 10:32:43 PM",
+      "dateFinished": "Apr 19, 2018 10:32:43 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "def hash(password: String): String \u003d {\n  val hashed \u003d org.apache.commons.codec.digest.DigestUtils.sha1Hex(password)\n  hashed.toUpperCase\n}",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:33:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "hash: (password: String)String\nres187: String \u003d 7C4A8D09CA3762AF61E59520943DC26494F8941B\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524202103387_-977727926",
+      "id": "20180419-222823_1225812785",
+      "dateCreated": "Apr 19, 2018 10:28:23 PM",
+      "dateStarted": "Apr 19, 2018 10:33:39 PM",
+      "dateFinished": "Apr 19, 2018 10:33:39 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val mapped \u003d plainpasswords\n  .map(v \u003d\u003e (v, hash(v)))\n  .withColumnRenamed(\"_1\", \"plainpassword\")\n  .withColumnRenamed(\"_2\", \"hashed\")\n  \nval joined \u003d mapped.join(\n    pwnedpasswords,\n    mapped(\"hashed\") \u003d\u003d\u003d pwnedpasswords(\"pwnedhash\")\n  )\n  .select(\n    $\"plainpassword\",\n    $\"pwnedhash\",\n    $\"count\"\n  )\n  .orderBy(desc(\"count\"))\n\njoined.show()",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:38:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "mapped: org.apache.spark.sql.DataFrame \u003d [plainpassword: string, hashed: string]\njoined: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [plainpassword: string, pwnedhash: string ... 1 more field]\n+-------------+--------------------+--------+\n|plainpassword|           pwnedhash|   count|\n+-------------+--------------------+--------+\n|       123456|7C4A8D09CA3762AF6...|20760336|\n|    123456789|F7C3BC1D808E04732...| 7016669|\n|       qwerty|B1B3773A05C0ED017...| 3599486|\n|     password|5BAA61E4C9B93F3F0...| 3303003|\n|       111111|3D4F2BF07DC1BE38B...| 2900049|\n|     12345678|7C222FB2927D828AF...| 2680521|\n|       abc123|6367C48DD193D56EA...| 2670319|\n|    password1|E38AD214943DAAD1D...| 2310111|\n|      1234567|20EABE5D64B0E2167...| 2298084|\n|        12345|8CB2237D0679CA88D...| 2088998|\n|   1234567890|01B307ACBA4F54F55...| 2075018|\n|       123123|601F1889667EFAEBB...| 2048411|\n|       000000|C984AED014AEC7623...| 1832944|\n|     iloveyou|EE8D8728F435FD550...| 1462146|\n|         1234|7110EDA4D09E062AA...| 1143408|\n|   1q2w3e4r5t|B80A9AED8AF17118E...| 1109333|\n|   qwertyuiop|B0399D2029F64D445...| 1028295|\n|          123|40BD001563085FC35...|  977827|\n|       monkey|AB87D24BDC7452E55...|  932064|\n|      123456a|360E46F15F432AF83...|  928360|\n+-------------+--------------------+--------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524184556079_-1305292762",
+      "id": "20180419-173556_1130987287",
+      "dateCreated": "Apr 19, 2018 5:35:56 PM",
+      "dateStarted": "Apr 19, 2018 10:38:01 PM",
+      "dateFinished": "Apr 19, 2018 10:38:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// find most common lengths of pwned passwords\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n  )\n  .groupBy($\"len\")\n  .agg(sum($\"count\").as(\"count\"))\n  .orderBy(desc(\"count\"))\n  .show()\n\n// find most common character of pwned passwords",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:39:01 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.Row\n+---+---------+\n|len|    count|\n+---+---------+\n|  6|290224129|\n|  8|207282634|\n|  7|155550242|\n|  9| 70927347|\n| 10| 37402710|\n|  5| 29768532|\n|  4| 25224710|\n| 11|  5341827|\n|  3|  4961682|\n| 12|  3542702|\n| 13|   804854|\n| 14|   346747|\n| 16|   271147|\n| 15|   196750|\n| 18|   110927|\n| 20|    66273|\n|  1|    33864|\n| 17|    29398|\n| 19|    22536|\n| 26|     4123|\n+---+---------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524194099960_1158936031",
+      "id": "20180419-201459_703665564",
+      "dateCreated": "Apr 19, 2018 8:14:59 PM",
+      "dateStarted": "Apr 19, 2018 10:39:01 PM",
+      "dateFinished": "Apr 19, 2018 10:39:56 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// why are there so many 26 character passwords?\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    $\"plainpassword\",\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n)\n.where($\"len\" \u003d\u003d\u003d 26)\n.show()\n",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:09:08 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524194982793_-276892669",
+      "id": "20180419-202942_724505647",
+      "dateCreated": "Apr 19, 2018 8:29:42 PM",
+      "dateStarted": "Apr 19, 2018 10:10:56 PM",
+      "dateFinished": "Apr 19, 2018 10:12:02 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// show schema inference from csvs or json\n// how many people are basing passwords off of company names?\n\nval companies \u003d spark\n  .read\n  .option(\"header\", \"true\")\n  .option(\"inferSchema\", \"true\")\n  .csv(\"./code/password-data/helper-data/fortune500.csv\")\n\ndef companyKeyword \u003d udf((company: String) \u003d\u003e {\n  company.split(\" \").head.toLowerCase\n})\n\nval companyKeys \u003d companies.withColumn(\"keyword\", companyKeyword($\"company\"))\n\ncompanyKeys.join(\n    joined,\n    joined(\"plainpassword\") \u003d\u003d\u003d companyKeys(\"keyword\"))\n  )\n  .select($\"plainpassword\", $\"keyword\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524196898878_-145549919",
+      "id": "20180419-210138_1182407785",
+      "dateCreated": "Apr 19, 2018 9:01:38 PM",
+      "dateStarted": "Apr 19, 2018 10:11:30 PM",
+      "dateFinished": "Apr 19, 2018 10:12:04 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").toDF(\"name\")\n\ndoggos.show()",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524199335106_694233216",
+      "id": "20180419-214215_1514124042",
+      "dateCreated": "Apr 19, 2018 9:42:15 PM",
+      "dateStarted": "Apr 19, 2018 10:12:02 PM",
+      "dateFinished": "Apr 19, 2018 10:12:06 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").map(_.toLowerCase).toDF(\"name\")\n\ndoggos.join(\n    joined,\n    joined(\"plainpassword\").contains(doggos(\"name\"))\n  )\n  .select($\"plainpassword\", $\"name\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524199047105_1426999269",
+      "id": "20180419-213727_339744891",
+      "dateCreated": "Apr 19, 2018 9:37:27 PM",
+      "dateStarted": "Apr 19, 2018 10:12:05 PM",
+      "dateFinished": "Apr 19, 2018 10:12:22 PM",
+      "status": "ERROR",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\n\n\n\n\n\n\n\n\n\n",
+      "user": "admin",
+      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1523556664117_1664574857",
+      "id": "20180412-141104_329727482",
+      "dateCreated": "Apr 12, 2018 2:11:04 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Analyzing pwned passwords",
+  "id": "2DAANS78Z",
+  "angularObjects": {
+    "2DD5Z2CQF:shared_process": [],
+    "2DD1YZ5BZ:shared_process": [],
+    "2DD3K4GH4:shared_process": [],
+    "2DAZHT7T8:shared_process": [],
+    "2DCUV1QMZ:shared_process": [],
+    "2D9R1U1F8:shared_process": [],
+    "2D9MVRRX1:shared_process": [],
+    "2DAYABNT9:shared_process": [],
+    "2DC98962R:shared_process": [],
+    "2DBCJ97ZQ:shared_process": [],
+    "2D9MB1JK5:shared_process": [],
+    "2DC56VZGJ:shared_process": [],
+    "2DCG8R32M:shared_process": [],
+    "2D9EWAGHA:shared_process": [],
+    "2DC4TSD6W:shared_process": [],
+    "2DAGM9T8D:shared_process": [],
+    "2DAMEA9WN:shared_process": [],
+    "2DACV72J4:shared_process": [],
+    "2DCNBJC7M:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}
