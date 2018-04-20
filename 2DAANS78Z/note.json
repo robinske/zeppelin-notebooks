@@ -444,6 +444,9 @@
     "2DACV72J4:shared_process": [],
     "2DCNBJC7M:shared_process": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
   "info": {}
 }
