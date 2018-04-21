@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._",
+      "text": "// import necessities\n\nimport org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:32:29 PM",
+      "dateUpdated": "Apr 20, 2018 5:59:56 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -32,15 +32,15 @@
       "jobName": "paragraph_1522884804879_-221307662",
       "id": "20180404-163324_1004741823",
       "dateCreated": "Apr 4, 2018 4:33:24 PM",
-      "dateStarted": "Apr 19, 2018 10:32:29 PM",
-      "dateFinished": "Apr 19, 2018 10:32:29 PM",
+      "dateStarted": "Apr 20, 2018 5:59:17 PM",
+      "dateFinished": "Apr 20, 2018 5:59:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val badwords \u003d spark.read.text(\"./code/password-data/helper-data/badwords.txt\")",
+      "text": "// read in bad words\nval badwords \u003d spark.read.text(\"./code/password-data/helper-data/badwords.txt\")",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:32:31 PM",
+      "dateUpdated": "Apr 20, 2018 6:00:15 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -67,15 +67,15 @@
       "jobName": "paragraph_1524181422136_1329581553",
       "id": "20180419-164342_1719299808",
       "dateCreated": "Apr 19, 2018 4:43:42 PM",
-      "dateStarted": "Apr 19, 2018 10:32:31 PM",
-      "dateFinished": "Apr 19, 2018 10:32:31 PM",
+      "dateStarted": "Apr 20, 2018 5:59:17 PM",
+      "dateFinished": "Apr 20, 2018 5:59:17 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val plaintextdumps \u003d spark\n  .read\n  .text(\"./code/password-data/plaintextdumps/*\")\n\nval plainpasswords: Dataset[String] \u003d plaintextdumps.join(\n  badwords,\n  plaintextdumps(\"value\").contains(badwords(\"value\")),\n  \"left_anti\"\n).select(plaintextdumps(\"value\")).as[String]\n\nplaintextdumps.count()\nbadwords.count()\nplainpasswords.count()",
+      "text": "// read in plain text passwords, anti-join with badwords so this presentation is SFW\n\nval plaintextdumps \u003d spark\n  .read\n  .text(\"./code/password-data/plaintextdumps/*\")\n\nval plainpasswords: Dataset[String] \u003d plaintextdumps.join(\n  badwords,\n  plaintextdumps(\"value\").contains(badwords(\"value\")),\n  \"left_anti\"\n).select(plaintextdumps(\"value\")).as[String]\n\nplaintextdumps.count()\nbadwords.count()\nplainpasswords.count()",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:32:33 PM",
+      "dateUpdated": "Apr 20, 2018 6:00:41 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -96,7 +96,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "plaintextdumps: org.apache.spark.sql.DataFrame \u003d [value: string]\nplainpasswords: org.apache.spark.sql.Dataset[String] \u003d [value: string]\nres177: Long \u003d 999999\nres178: Long \u003d 64\nres179: Long \u003d 979658\n"
+            "data": "plaintextdumps: org.apache.spark.sql.DataFrame \u003d [value: string]\nplainpasswords: org.apache.spark.sql.Dataset[String] \u003d [value: string]\nres6: Long \u003d 999999\nres7: Long \u003d 64\nres8: Long \u003d 979658\n"
           }
         ]
       },
@@ -104,15 +104,15 @@
       "jobName": "paragraph_1524181939790_-856429237",
       "id": "20180419-165219_359824913",
       "dateCreated": "Apr 19, 2018 4:52:19 PM",
-      "dateStarted": "Apr 19, 2018 10:32:33 PM",
-      "dateFinished": "Apr 19, 2018 10:32:36 PM",
+      "dateStarted": "Apr 20, 2018 5:59:17 PM",
+      "dateFinished": "Apr 20, 2018 5:59:21 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "case class PasswordHash(pwnedhash: String, count: Int)\n\nval pwnedpasswords: Dataset[PasswordHash] \u003d spark\n  .read\n  .text(\"./code/password-data/pwnedpasswords/*\")\n  .as[String]\n  .map { line \u003d\u003e\n    val Array(password, count) \u003d line.trim.split(\":\")\n    PasswordHash(password, count.toInt)\n  }\n\npwnedpasswords.show()",
+      "text": "// read in pwnedpasswords\n\ncase class PasswordHash(pwnedhash: String, count: Int)\n\nval pwnedpasswords: Dataset[PasswordHash] \u003d spark\n  .read\n  .text(\"./code/password-data/pwnedpasswords/*\")\n  .as[String]\n  .map { line \u003d\u003e\n    val Array(password, count) \u003d line.trim.split(\":\")\n    PasswordHash(password, count.toInt)\n  }\n\npwnedpasswords.show()",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:32:38 PM",
+      "dateUpdated": "Apr 20, 2018 6:01:14 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -140,15 +140,15 @@
       "jobName": "paragraph_1522884880176_-226001270",
       "id": "20180404-163440_838714863",
       "dateCreated": "Apr 4, 2018 4:34:40 PM",
-      "dateStarted": "Apr 19, 2018 10:32:38 PM",
-      "dateFinished": "Apr 19, 2018 10:32:38 PM",
+      "dateStarted": "Apr 20, 2018 5:59:17 PM",
+      "dateFinished": "Apr 20, 2018 5:59:22 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "plainpasswords.show()",
+      "text": "// show plain passwords\n\nplainpasswords.show()",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:32:43 PM",
+      "dateUpdated": "Apr 20, 2018 6:01:37 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -175,15 +175,15 @@
       "jobName": "paragraph_1524202287480_1371208437",
       "id": "20180419-223127_1437457669",
       "dateCreated": "Apr 19, 2018 10:31:27 PM",
-      "dateStarted": "Apr 19, 2018 10:32:43 PM",
-      "dateFinished": "Apr 19, 2018 10:32:43 PM",
+      "dateStarted": "Apr 20, 2018 5:59:21 PM",
+      "dateFinished": "Apr 20, 2018 5:59:22 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "def hash(password: String): String \u003d {\n  val hashed \u003d org.apache.commons.codec.digest.DigestUtils.sha1Hex(password)\n  hashed.toUpperCase\n}",
+      "text": "// define a hash function so we can \n\ndef hash(password: String): String \u003d {\n  val hashed \u003d org.apache.commons.codec.digest.DigestUtils.sha1Hex(password)\n  hashed.toUpperCase\n}",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:33:46 PM",
+      "dateUpdated": "Apr 20, 2018 6:01:56 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -202,7 +202,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "hash: (password: String)String\nres187: String \u003d 7C4A8D09CA3762AF61E59520943DC26494F8941B\n"
+            "data": "hash: (password: String)String\n"
           }
         ]
       },
@@ -210,15 +210,15 @@
       "jobName": "paragraph_1524202103387_-977727926",
       "id": "20180419-222823_1225812785",
       "dateCreated": "Apr 19, 2018 10:28:23 PM",
-      "dateStarted": "Apr 19, 2018 10:33:39 PM",
-      "dateFinished": "Apr 19, 2018 10:33:39 PM",
+      "dateStarted": "Apr 20, 2018 5:59:22 PM",
+      "dateFinished": "Apr 20, 2018 5:59:22 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val mapped \u003d plainpasswords\n  .map(v \u003d\u003e (v, hash(v)))\n  .withColumnRenamed(\"_1\", \"plainpassword\")\n  .withColumnRenamed(\"_2\", \"hashed\")\n  \nval joined \u003d mapped.join(\n    pwnedpasswords,\n    mapped(\"hashed\") \u003d\u003d\u003d pwnedpasswords(\"pwnedhash\")\n  )\n  .select(\n    $\"plainpassword\",\n    $\"pwnedhash\",\n    $\"count\"\n  )\n  .orderBy(desc(\"count\"))\n\njoined.show()",
+      "text": "// hash plaintext passwords, join w/ pwned passwords\n\nval mapped \u003d plainpasswords\n  .map(v \u003d\u003e (v, hash(v)))\n  .withColumnRenamed(\"_1\", \"plainpassword\")\n  .withColumnRenamed(\"_2\", \"hashed\")\n  \nval joined \u003d mapped.join(\n    pwnedpasswords,\n    mapped(\"hashed\") \u003d\u003d\u003d pwnedpasswords(\"pwnedhash\")\n  )\n  .select(\n    $\"plainpassword\",\n    $\"pwnedhash\",\n    $\"count\"\n  )\n  .orderBy(desc(\"count\"))\n\njoined.show()",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:38:01 PM",
+      "dateUpdated": "Apr 20, 2018 6:14:32 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -245,15 +245,15 @@
       "jobName": "paragraph_1524184556079_-1305292762",
       "id": "20180419-173556_1130987287",
       "dateCreated": "Apr 19, 2018 5:35:56 PM",
-      "dateStarted": "Apr 19, 2018 10:38:01 PM",
-      "dateFinished": "Apr 19, 2018 10:38:33 PM",
+      "dateStarted": "Apr 20, 2018 5:59:23 PM",
+      "dateFinished": "Apr 20, 2018 5:59:57 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "// find most common lengths of pwned passwords\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n  )\n  .groupBy($\"len\")\n  .agg(sum($\"count\").as(\"count\"))\n  .orderBy(desc(\"count\"))\n  .show()\n\n// find most common character of pwned passwords",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:39:01 PM",
+      "dateUpdated": "Apr 20, 2018 5:59:17 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -280,15 +280,15 @@
       "jobName": "paragraph_1524194099960_1158936031",
       "id": "20180419-201459_703665564",
       "dateCreated": "Apr 19, 2018 8:14:59 PM",
-      "dateStarted": "Apr 19, 2018 10:39:01 PM",
-      "dateFinished": "Apr 19, 2018 10:39:56 PM",
+      "dateStarted": "Apr 20, 2018 5:59:23 PM",
+      "dateFinished": "Apr 20, 2018 6:00:46 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "// why are there so many 26 character passwords?\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    $\"plainpassword\",\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n)\n.where($\"len\" \u003d\u003d\u003d 26)\n.show()\n",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:09:08 PM",
+      "dateUpdated": "Apr 20, 2018 5:59:17 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -301,21 +301,29 @@
       "settings": {
         "params": {},
         "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.Row\n+--------------------+---+-----+\n|       plainpassword|len|count|\n+--------------------+---+-----+\n|qwertyuiopasdfghj...| 26| 3179|\n|qazwsxedcrfvtgbyh...| 26|  622|\n|zxcvbnmasdfghjklq...| 26|  229|\n|12345678912345678...| 26|   33|\n|ybxnjytbcnbyfbdct...| 26|   19|\n|vlad_ohotnickvlad...| 26|   15|\n|zstarchenkovazsta...| 26|   14|\n|vygodner322332322...| 26|   12|\n+--------------------+---+-----+\n\n"
+          }
+        ]
       },
       "apps": [],
       "jobName": "paragraph_1524194982793_-276892669",
       "id": "20180419-202942_724505647",
       "dateCreated": "Apr 19, 2018 8:29:42 PM",
-      "dateStarted": "Apr 19, 2018 10:10:56 PM",
-      "dateFinished": "Apr 19, 2018 10:12:02 PM",
-      "status": "ERROR",
-      "errorMessage": "",
+      "dateStarted": "Apr 20, 2018 5:59:58 PM",
+      "dateFinished": "Apr 20, 2018 6:01:08 PM",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "// show schema inference from csvs or json\n// how many people are basing passwords off of company names?\n\nval companies \u003d spark\n  .read\n  .option(\"header\", \"true\")\n  .option(\"inferSchema\", \"true\")\n  .csv(\"./code/password-data/helper-data/fortune500.csv\")\n\ndef companyKeyword \u003d udf((company: String) \u003d\u003e {\n  company.split(\" \").head.toLowerCase\n})\n\nval companyKeys \u003d companies.withColumn(\"keyword\", companyKeyword($\"company\"))\n\ncompanyKeys.join(\n    joined,\n    joined(\"plainpassword\") \u003d\u003d\u003d companyKeys(\"keyword\"))\n  )\n  .select($\"plainpassword\", $\"keyword\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
+      "text": "// show schema inference from csvs or json\n// how many people are basing passwords off of company names?\n\nval companies \u003d spark\n  .read\n  .option(\"header\", \"true\")\n  .option(\"inferSchema\", \"true\")\n  .csv(\"./code/password-data/helper-data/fortune500.csv\")\n\ndef companyKeyword \u003d udf((company: String) \u003d\u003e {\n  company.split(\" \").head.toLowerCase\n})\n\nval companyKeys \u003d companies.withColumn(\"keyword\", companyKeyword($\"company\"))\n\ncompanyKeys.join(\n    joined,\n    joined(\"plainpassword\") \u003d\u003d\u003d companyKeys(\"keyword\")\n  )\n  .select($\"plainpassword\", $\"keyword\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "dateUpdated": "Apr 20, 2018 6:29:21 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -329,20 +337,28 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "companies: org.apache.spark.sql.DataFrame \u003d [lon: double, lat: double ... 5 more fields]\ncompanyKeyword: org.apache.spark.sql.expressions.UserDefinedFunction\ncompanyKeys: org.apache.spark.sql.DataFrame \u003d [lon: double, lat: double ... 6 more fields]\n+-------------+---------+------+\n|plainpassword|  keyword| count|\n+-------------+---------+------+\n|        apple|    apple|221030|\n|       google|   google|102637|\n|    microsoft|microsoft| 47531|\n|      general|  general| 39319|\n|      general|  general| 39319|\n|      freddie|  freddie| 34439|\n|       target|   target| 24016|\n|         home|     home| 21029|\n|     marathon| marathon| 20522|\n|      express|  express| 19127|\n|     cardinal| cardinal| 18643|\n|         ford|     ford| 18108|\n|      walmart|  walmart| 13758|\n|       archer|   archer| 13252|\n|     phillips| phillips| 10656|\n|       boeing|   boeing|  9803|\n|      verizon|  verizon|  8664|\n|      comcast|  comcast|  5787|\n|       fannie|   fannie|  4479|\n|       anthem|   anthem|  2632|\n+-------------+---------+------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
       "apps": [],
       "jobName": "paragraph_1524196898878_-145549919",
       "id": "20180419-210138_1182407785",
       "dateCreated": "Apr 19, 2018 9:01:38 PM",
-      "dateStarted": "Apr 19, 2018 10:11:30 PM",
-      "dateFinished": "Apr 19, 2018 10:12:04 PM",
-      "status": "ERROR",
-      "errorMessage": "",
+      "dateStarted": "Apr 20, 2018 6:29:21 PM",
+      "dateFinished": "Apr 20, 2018 6:30:20 PM",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").toDF(\"name\")\n\ndoggos.show()",
+      "text": "// they\u0027re good dogs, Brent\n\nval doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").toDF(\"name\")\n\ndoggos.show()",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "dateUpdated": "Apr 20, 2018 6:17:53 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -358,20 +374,28 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "doggos: org.apache.spark.sql.DataFrame \u003d [name: string]\n+-------+\n|   name|\n+-------+\n|    Max|\n|Charlie|\n|  Buddy|\n| Cooper|\n|   Jack|\n|  Rocky|\n|   Bear|\n|   Duke|\n|   Toby|\n| Tucker|\n|  Bella|\n|   Lucy|\n|  Daisy|\n|   Lola|\n|   Luna|\n|  Molly|\n|  Sadie|\n| Sophie|\n| Bailey|\n| Maggie|\n+-------+\n\n"
+          }
+        ]
+      },
       "apps": [],
       "jobName": "paragraph_1524199335106_694233216",
       "id": "20180419-214215_1514124042",
       "dateCreated": "Apr 19, 2018 9:42:15 PM",
-      "dateStarted": "Apr 19, 2018 10:12:02 PM",
-      "dateFinished": "Apr 19, 2018 10:12:06 PM",
+      "dateStarted": "Apr 20, 2018 6:01:09 PM",
+      "dateFinished": "Apr 20, 2018 6:01:10 PM",
       "status": "FINISHED",
-      "errorMessage": "",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "val doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").map(_.toLowerCase).toDF(\"name\")\n\ndoggos.join(\n    joined,\n    joined(\"plainpassword\").contains(doggos(\"name\"))\n  )\n  .select($\"plainpassword\", $\"name\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
+      "text": "// 12/10 will use for every password.\n\nval doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").map(_.toLowerCase).toDF(\"name\")\n\ndoggos.join(\n    joined,\n    joined(\"plainpassword\").contains(doggos(\"name\"))\n  )\n  .select($\"plainpassword\", $\"name\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "dateUpdated": "Apr 20, 2018 6:31:54 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -385,20 +409,28 @@
         "params": {},
         "forms": {}
       },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "doggos: org.apache.spark.sql.DataFrame \u003d [name: string]\n+-------------+-------+------+\n|plainpassword|   name| count|\n+-------------+-------+------+\n|      charlie|charlie|278516|\n|     charlie1|charlie|198980|\n|       maggie| maggie|188539|\n|       sophie| sophie|149206|\n|       bailey| bailey|145918|\n|      jackson|   jack|128263|\n|       buddy1|  buddy|125085|\n|      maggie1| maggie|106376|\n|     jackson1|   jack| 92313|\n|       rocky1|  rocky| 91975|\n|       jackie|   jack| 87467|\n|       cooper| cooper| 86531|\n|     poohbear|   bear| 85938|\n|      bailey1| bailey| 84698|\n|     isabella|  bella| 81340|\n|       molly1|  molly| 76989|\n|      maxwell|    max| 74720|\n|    poohbear1|   bear| 73556|\n|     jackass1|   jack| 73372|\n|      jackass|   jack| 68871|\n+-------------+-------+------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
       "apps": [],
       "jobName": "paragraph_1524199047105_1426999269",
       "id": "20180419-213727_339744891",
       "dateCreated": "Apr 19, 2018 9:37:27 PM",
-      "dateStarted": "Apr 19, 2018 10:12:05 PM",
-      "dateFinished": "Apr 19, 2018 10:12:22 PM",
-      "status": "ERROR",
-      "errorMessage": "",
+      "dateStarted": "Apr 20, 2018 6:01:10 PM",
+      "dateFinished": "Apr 20, 2018 6:01:54 PM",
+      "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "\n\n\n\n\n\n\n\n\n\n\n",
       "user": "admin",
-      "dateUpdated": "Apr 19, 2018 10:09:09 PM",
+      "dateUpdated": "Apr 20, 2018 5:59:18 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
