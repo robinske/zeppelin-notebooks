@@ -3,362 +3,7 @@
     {
       "text": "// import necessities\n\nimport org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._",
       "user": "admin",
-      "dateUpdated": "Apr 20, 2018 5:59:56 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala",
-        "editorHide": false,
-        "tableHide": false
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1522884804879_-221307662",
-      "id": "20180404-163324_1004741823",
-      "dateCreated": "Apr 4, 2018 4:33:24 PM",
-      "dateStarted": "Apr 20, 2018 5:59:17 PM",
-      "dateFinished": "Apr 20, 2018 5:59:17 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// read in bad words\nval badwords \u003d spark.read.text(\"./code/password-data/helper-data/badwords.txt\")",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:00:15 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "badwords: org.apache.spark.sql.DataFrame \u003d [value: string]\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524181422136_1329581553",
-      "id": "20180419-164342_1719299808",
-      "dateCreated": "Apr 19, 2018 4:43:42 PM",
-      "dateStarted": "Apr 20, 2018 5:59:17 PM",
-      "dateFinished": "Apr 20, 2018 5:59:17 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// read in plain text passwords, anti-join with badwords so this presentation is SFW\n\nval plaintextdumps \u003d spark\n  .read\n  .text(\"./code/password-data/plaintextdumps/*\")\n\nval plainpasswords: Dataset[String] \u003d plaintextdumps.join(\n  badwords,\n  plaintextdumps(\"value\").contains(badwords(\"value\")),\n  \"left_anti\"\n).select(plaintextdumps(\"value\")).as[String]\n\nplaintextdumps.count()\nbadwords.count()\nplainpasswords.count()",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:00:41 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala",
-        "editorHide": false,
-        "tableHide": false
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "plaintextdumps: org.apache.spark.sql.DataFrame \u003d [value: string]\nplainpasswords: org.apache.spark.sql.Dataset[String] \u003d [value: string]\nres6: Long \u003d 999999\nres7: Long \u003d 64\nres8: Long \u003d 979658\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524181939790_-856429237",
-      "id": "20180419-165219_359824913",
-      "dateCreated": "Apr 19, 2018 4:52:19 PM",
-      "dateStarted": "Apr 20, 2018 5:59:17 PM",
-      "dateFinished": "Apr 20, 2018 5:59:21 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// read in pwnedpasswords\n\ncase class PasswordHash(pwnedhash: String, count: Int)\n\nval pwnedpasswords: Dataset[PasswordHash] \u003d spark\n  .read\n  .text(\"./code/password-data/pwnedpasswords/*\")\n  .as[String]\n  .map { line \u003d\u003e\n    val Array(password, count) \u003d line.trim.split(\":\")\n    PasswordHash(password, count.toInt)\n  }\n\npwnedpasswords.show()",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:01:14 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala",
-        "tableHide": false
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "defined class PasswordHash\npwnedpasswords: org.apache.spark.sql.Dataset[PasswordHash] \u003d [pwnedhash: string, count: int]\n+--------------------+--------+\n|           pwnedhash|   count|\n+--------------------+--------+\n|7C4A8D09CA3762AF6...|20760336|\n|F7C3BC1D808E04732...| 7016669|\n|B1B3773A05C0ED017...| 3599486|\n|5BAA61E4C9B93F3F0...| 3303003|\n|3D4F2BF07DC1BE38B...| 2900049|\n|7C222FB2927D828AF...| 2680521|\n|6367C48DD193D56EA...| 2670319|\n|E38AD214943DAAD1D...| 2310111|\n|20EABE5D64B0E2167...| 2298084|\n|8CB2237D0679CA88D...| 2088998|\n|01B307ACBA4F54F55...| 2075018|\n|601F1889667EFAEBB...| 2048411|\n|C984AED014AEC7623...| 1832944|\n|EE8D8728F435FD550...| 1462146|\n|7110EDA4D09E062AA...| 1143408|\n|B80A9AED8AF17118E...| 1109333|\n|B0399D2029F64D445...| 1028295|\n|40BD001563085FC35...|  977827|\n|AB87D24BDC7452E55...|  932064|\n|360E46F15F432AF83...|  928360|\n+--------------------+--------+\nonly showing top 20 rows\n\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1522884880176_-226001270",
-      "id": "20180404-163440_838714863",
-      "dateCreated": "Apr 4, 2018 4:34:40 PM",
-      "dateStarted": "Apr 20, 2018 5:59:17 PM",
-      "dateFinished": "Apr 20, 2018 5:59:22 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// show plain passwords\n\nplainpasswords.show()",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:01:37 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "+----------+\n|     value|\n+----------+\n|    123456|\n|  password|\n|  12345678|\n|    qwerty|\n| 123456789|\n|     12345|\n|      1234|\n|    111111|\n|   1234567|\n|    dragon|\n|    123123|\n|  baseball|\n|    abc123|\n|  football|\n|    monkey|\n|   letmein|\n|    shadow|\n|    master|\n|    666666|\n|qwertyuiop|\n+----------+\nonly showing top 20 rows\n\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524202287480_1371208437",
-      "id": "20180419-223127_1437457669",
-      "dateCreated": "Apr 19, 2018 10:31:27 PM",
-      "dateStarted": "Apr 20, 2018 5:59:21 PM",
-      "dateFinished": "Apr 20, 2018 5:59:22 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// define a hash function so we can \n\ndef hash(password: String): String \u003d {\n  val hashed \u003d org.apache.commons.codec.digest.DigestUtils.sha1Hex(password)\n  hashed.toUpperCase\n}",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:01:56 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "hash: (password: String)String\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524202103387_-977727926",
-      "id": "20180419-222823_1225812785",
-      "dateCreated": "Apr 19, 2018 10:28:23 PM",
-      "dateStarted": "Apr 20, 2018 5:59:22 PM",
-      "dateFinished": "Apr 20, 2018 5:59:22 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// hash plaintext passwords, join w/ pwned passwords\n\nval mapped \u003d plainpasswords\n  .map(v \u003d\u003e (v, hash(v)))\n  .withColumnRenamed(\"_1\", \"plainpassword\")\n  .withColumnRenamed(\"_2\", \"hashed\")\n  \nval joined \u003d mapped.join(\n    pwnedpasswords,\n    mapped(\"hashed\") \u003d\u003d\u003d pwnedpasswords(\"pwnedhash\")\n  )\n  .select(\n    $\"plainpassword\",\n    $\"pwnedhash\",\n    $\"count\"\n  )\n  .orderBy(desc(\"count\"))\n\njoined.show()",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:14:32 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "mapped: org.apache.spark.sql.DataFrame \u003d [plainpassword: string, hashed: string]\njoined: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [plainpassword: string, pwnedhash: string ... 1 more field]\n+-------------+--------------------+--------+\n|plainpassword|           pwnedhash|   count|\n+-------------+--------------------+--------+\n|       123456|7C4A8D09CA3762AF6...|20760336|\n|    123456789|F7C3BC1D808E04732...| 7016669|\n|       qwerty|B1B3773A05C0ED017...| 3599486|\n|     password|5BAA61E4C9B93F3F0...| 3303003|\n|       111111|3D4F2BF07DC1BE38B...| 2900049|\n|     12345678|7C222FB2927D828AF...| 2680521|\n|       abc123|6367C48DD193D56EA...| 2670319|\n|    password1|E38AD214943DAAD1D...| 2310111|\n|      1234567|20EABE5D64B0E2167...| 2298084|\n|        12345|8CB2237D0679CA88D...| 2088998|\n|   1234567890|01B307ACBA4F54F55...| 2075018|\n|       123123|601F1889667EFAEBB...| 2048411|\n|       000000|C984AED014AEC7623...| 1832944|\n|     iloveyou|EE8D8728F435FD550...| 1462146|\n|         1234|7110EDA4D09E062AA...| 1143408|\n|   1q2w3e4r5t|B80A9AED8AF17118E...| 1109333|\n|   qwertyuiop|B0399D2029F64D445...| 1028295|\n|          123|40BD001563085FC35...|  977827|\n|       monkey|AB87D24BDC7452E55...|  932064|\n|      123456a|360E46F15F432AF83...|  928360|\n+-------------+--------------------+--------+\nonly showing top 20 rows\n\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524184556079_-1305292762",
-      "id": "20180419-173556_1130987287",
-      "dateCreated": "Apr 19, 2018 5:35:56 PM",
-      "dateStarted": "Apr 20, 2018 5:59:23 PM",
-      "dateFinished": "Apr 20, 2018 5:59:57 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// find most common lengths of pwned passwords\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n  )\n  .groupBy($\"len\")\n  .agg(sum($\"count\").as(\"count\"))\n  .orderBy(desc(\"count\"))\n  .show()\n\n// find most common character of pwned passwords",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 5:59:17 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "import org.apache.spark.sql.Row\n+---+---------+\n|len|    count|\n+---+---------+\n|  6|290224129|\n|  8|207282634|\n|  7|155550242|\n|  9| 70927347|\n| 10| 37402710|\n|  5| 29768532|\n|  4| 25224710|\n| 11|  5341827|\n|  3|  4961682|\n| 12|  3542702|\n| 13|   804854|\n| 14|   346747|\n| 16|   271147|\n| 15|   196750|\n| 18|   110927|\n| 20|    66273|\n|  1|    33864|\n| 17|    29398|\n| 19|    22536|\n| 26|     4123|\n+---+---------+\nonly showing top 20 rows\n\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524194099960_1158936031",
-      "id": "20180419-201459_703665564",
-      "dateCreated": "Apr 19, 2018 8:14:59 PM",
-      "dateStarted": "Apr 20, 2018 5:59:23 PM",
-      "dateFinished": "Apr 20, 2018 6:00:46 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// why are there so many 26 character passwords?\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    $\"plainpassword\",\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n)\n.where($\"len\" \u003d\u003d\u003d 26)\n.show()\n",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 5:59:17 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "import org.apache.spark.sql.Row\n+--------------------+---+-----+\n|       plainpassword|len|count|\n+--------------------+---+-----+\n|qwertyuiopasdfghj...| 26| 3179|\n|qazwsxedcrfvtgbyh...| 26|  622|\n|zxcvbnmasdfghjklq...| 26|  229|\n|12345678912345678...| 26|   33|\n|ybxnjytbcnbyfbdct...| 26|   19|\n|vlad_ohotnickvlad...| 26|   15|\n|zstarchenkovazsta...| 26|   14|\n|vygodner322332322...| 26|   12|\n+--------------------+---+-----+\n\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524194982793_-276892669",
-      "id": "20180419-202942_724505647",
-      "dateCreated": "Apr 19, 2018 8:29:42 PM",
-      "dateStarted": "Apr 20, 2018 5:59:58 PM",
-      "dateFinished": "Apr 20, 2018 6:01:08 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// show schema inference from csvs or json\n// how many people are basing passwords off of company names?\n\nval companies \u003d spark\n  .read\n  .option(\"header\", \"true\")\n  .option(\"inferSchema\", \"true\")\n  .csv(\"./code/password-data/helper-data/fortune500.csv\")\n\ndef companyKeyword \u003d udf((company: String) \u003d\u003e {\n  company.split(\" \").head.toLowerCase\n})\n\nval companyKeys \u003d companies.withColumn(\"keyword\", companyKeyword($\"company\"))\n\ncompanyKeys.join(\n    joined,\n    joined(\"plainpassword\") \u003d\u003d\u003d companyKeys(\"keyword\")\n  )\n  .select($\"plainpassword\", $\"keyword\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:29:21 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala"
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "companies: org.apache.spark.sql.DataFrame \u003d [lon: double, lat: double ... 5 more fields]\ncompanyKeyword: org.apache.spark.sql.expressions.UserDefinedFunction\ncompanyKeys: org.apache.spark.sql.DataFrame \u003d [lon: double, lat: double ... 6 more fields]\n+-------------+---------+------+\n|plainpassword|  keyword| count|\n+-------------+---------+------+\n|        apple|    apple|221030|\n|       google|   google|102637|\n|    microsoft|microsoft| 47531|\n|      general|  general| 39319|\n|      general|  general| 39319|\n|      freddie|  freddie| 34439|\n|       target|   target| 24016|\n|         home|     home| 21029|\n|     marathon| marathon| 20522|\n|      express|  express| 19127|\n|     cardinal| cardinal| 18643|\n|         ford|     ford| 18108|\n|      walmart|  walmart| 13758|\n|       archer|   archer| 13252|\n|     phillips| phillips| 10656|\n|       boeing|   boeing|  9803|\n|      verizon|  verizon|  8664|\n|      comcast|  comcast|  5787|\n|       fannie|   fannie|  4479|\n|       anthem|   anthem|  2632|\n+-------------+---------+------+\nonly showing top 20 rows\n\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1524196898878_-145549919",
-      "id": "20180419-210138_1182407785",
-      "dateCreated": "Apr 19, 2018 9:01:38 PM",
-      "dateStarted": "Apr 20, 2018 6:29:21 PM",
-      "dateFinished": "Apr 20, 2018 6:30:20 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// they\u0027re good dogs, Brent\n\nval doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").toDF(\"name\")\n\ndoggos.show()",
-      "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:17:53 PM",
+      "dateUpdated": "Apr 23, 2018 2:29:10 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -379,23 +24,240 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "doggos: org.apache.spark.sql.DataFrame \u003d [name: string]\n+-------+\n|   name|\n+-------+\n|    Max|\n|Charlie|\n|  Buddy|\n| Cooper|\n|   Jack|\n|  Rocky|\n|   Bear|\n|   Duke|\n|   Toby|\n| Tucker|\n|  Bella|\n|   Lucy|\n|  Daisy|\n|   Lola|\n|   Luna|\n|  Molly|\n|  Sadie|\n| Sophie|\n| Bailey|\n| Maggie|\n+-------+\n\n"
+            "data": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._\n"
           }
         ]
       },
       "apps": [],
-      "jobName": "paragraph_1524199335106_694233216",
-      "id": "20180419-214215_1514124042",
-      "dateCreated": "Apr 19, 2018 9:42:15 PM",
-      "dateStarted": "Apr 20, 2018 6:01:09 PM",
-      "dateFinished": "Apr 20, 2018 6:01:10 PM",
+      "jobName": "paragraph_1522884804879_-221307662",
+      "id": "20180404-163324_1004741823",
+      "dateCreated": "Apr 4, 2018 4:33:24 PM",
+      "dateStarted": "Apr 23, 2018 2:29:11 PM",
+      "dateFinished": "Apr 23, 2018 2:29:28 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "// 12/10 will use for every password.\n\nval doggos \u003d spark.read.textFile(\"./code/password-data/helper-data/dogs.txt\").map(_.toLowerCase).toDF(\"name\")\n\ndoggos.join(\n    joined,\n    joined(\"plainpassword\").contains(doggos(\"name\"))\n  )\n  .select($\"plainpassword\", $\"name\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
+      "text": "// read in bad words\nval badwords \u003d spark.read.text(\"./code/password-data/helper-data/badwords.txt\")",
       "user": "admin",
-      "dateUpdated": "Apr 20, 2018 6:31:54 PM",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "badwords: org.apache.spark.sql.DataFrame \u003d [value: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524181422136_1329581553",
+      "id": "20180419-164342_1719299808",
+      "dateCreated": "Apr 19, 2018 4:43:42 PM",
+      "dateStarted": "Apr 23, 2018 12:18:12 PM",
+      "dateFinished": "Apr 23, 2018 12:18:13 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// read in plain text passwords, anti-join with badwords so this presentation is SFW\n\nval plainpasswords \u003d spark\n  .read\n  .textFile(\"./passwords.txt\")\n\n// val plainpasswords: Dataset[String] \u003d plaintextdumps.join(\n//   badwords,\n//   plaintextdumps(\"value\").contains(badwords(\"value\")),\n//   \"left_anti\"\n// ).select(plaintextdumps(\"value\")).as[String]\n",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 2:30:05 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "plainpasswords: org.apache.spark.sql.Dataset[String] \u003d [value: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524181939790_-856429237",
+      "id": "20180419-165219_359824913",
+      "dateCreated": "Apr 19, 2018 4:52:19 PM",
+      "dateStarted": "Apr 23, 2018 2:30:05 PM",
+      "dateFinished": "Apr 23, 2018 2:30:07 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// read in pwnedpasswords\n\ncase class PasswordHash(hash: String, count: Int)\n\nval pwnedpasswords \u003d spark\n  .read\n  .text(\"./pwnedpasswords/*\")\n  .as[String]\n  .map { line \u003d\u003e\n    val Array(hash, count) \u003d line.trim.split(\":\")\n    \n    PasswordHash(hash.take(5), count.toInt)\n  }\n  .reduceByKey(_ + _)\n\npwnedpasswords.take(1).foreach(println)",
+      "user": "admin",
+      "dateUpdated": "Apr 26, 2018 4:23:36 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "defined class PasswordHash\n\u003cconsole\u003e:48: error: value reduceByKey is not a member of org.apache.spark.sql.Dataset[PasswordHash]\npossible cause: maybe a semicolon is missing before `value reduceByKey\u0027?\n         .reduceByKey(_ + _)\n          ^\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1522884880176_-226001270",
+      "id": "20180404-163440_838714863",
+      "dateCreated": "Apr 4, 2018 4:34:40 PM",
+      "dateStarted": "Apr 26, 2018 4:23:36 PM",
+      "dateFinished": "Apr 26, 2018 4:23:36 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// show plain passwords\n\nplainpasswords.show()",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+----------+\n|     value|\n+----------+\n|    123456|\n|  password|\n|  12345678|\n|    qwerty|\n| 123456789|\n|     12345|\n|      1234|\n|    111111|\n|   1234567|\n|    dragon|\n|    123123|\n|  baseball|\n|    abc123|\n|  football|\n|    monkey|\n|   letmein|\n|    shadow|\n|    master|\n|    666666|\n|qwertyuiop|\n+----------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524202287480_1371208437",
+      "id": "20180419-223127_1437457669",
+      "dateCreated": "Apr 19, 2018 10:31:27 PM",
+      "dateStarted": "Apr 23, 2018 12:18:20 PM",
+      "dateFinished": "Apr 23, 2018 12:18:21 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// define a hash function so we can \n\ndef hash(password: String): String \u003d {\n  val hashed \u003d org.apache.commons.codec.digest.DigestUtils.sha1Hex(password)\n  hashed.toUpperCase\n}",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 2:30:34 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "hash: (password: String)String\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524202103387_-977727926",
+      "id": "20180419-222823_1225812785",
+      "dateCreated": "Apr 19, 2018 10:28:23 PM",
+      "dateStarted": "Apr 23, 2018 2:30:34 PM",
+      "dateFinished": "Apr 23, 2018 2:30:34 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// hash plaintext passwords, join w/ pwned passwords\n\nval mapped \u003d plainpasswords\n  .map(v \u003d\u003e (v, hash(v)))\n  .withColumnRenamed(\"_1\", \"password\")\n  .withColumnRenamed(\"_2\", \"hashed\")\n  \nval joined \u003d mapped.join(\n    pwnedpasswords,\n    mapped(\"hashed\") \u003d\u003d\u003d pwnedpasswords(\"hash\")\n  )\n  .select(\n    $\"password\",\n    $\"hash\",\n    $\"count\"\n  )\n  .orderBy(desc(\"count\"))\n\n",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 2:40:18 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "mapped: org.apache.spark.sql.DataFrame \u003d [password: string, hashed: string]\njoined: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [password: string, hash: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524184556079_-1305292762",
+      "id": "20180419-173556_1130987287",
+      "dateCreated": "Apr 19, 2018 5:35:56 PM",
+      "dateStarted": "Apr 23, 2018 2:40:18 PM",
+      "dateFinished": "Apr 23, 2018 2:40:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "joined.write.option(\"header\", \"true\").csv(\"./passwords\")",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 2:40:32 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -411,26 +273,113 @@
       },
       "results": {
         "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "doggos: org.apache.spark.sql.DataFrame \u003d [name: string]\n+-------------+-------+------+\n|plainpassword|   name| count|\n+-------------+-------+------+\n|      charlie|charlie|278516|\n|     charlie1|charlie|198980|\n|       maggie| maggie|188539|\n|       sophie| sophie|149206|\n|       bailey| bailey|145918|\n|      jackson|   jack|128263|\n|       buddy1|  buddy|125085|\n|      maggie1| maggie|106376|\n|     jackson1|   jack| 92313|\n|       rocky1|  rocky| 91975|\n|       jackie|   jack| 87467|\n|       cooper| cooper| 86531|\n|     poohbear|   bear| 85938|\n|      bailey1| bailey| 84698|\n|     isabella|  bella| 81340|\n|       molly1|  molly| 76989|\n|      maxwell|    max| 74720|\n|    poohbear1|   bear| 73556|\n|     jackass1|   jack| 73372|\n|      jackass|   jack| 68871|\n+-------------+-------+------+\nonly showing top 20 rows\n\n"
-          }
-        ]
+        "msg": []
       },
       "apps": [],
-      "jobName": "paragraph_1524199047105_1426999269",
-      "id": "20180419-213727_339744891",
-      "dateCreated": "Apr 19, 2018 9:37:27 PM",
-      "dateStarted": "Apr 20, 2018 6:01:10 PM",
-      "dateFinished": "Apr 20, 2018 6:01:54 PM",
+      "jobName": "paragraph_1524519150703_-367567624",
+      "id": "20180423-143230_1478756894",
+      "dateCreated": "Apr 23, 2018 2:32:30 PM",
+      "dateStarted": "Apr 23, 2018 2:40:32 PM",
+      "dateFinished": "Apr 23, 2018 2:41:12 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "\n\n\n\n\n\n\n\n\n\n\n",
+      "text": "// find most common lengths of pwned passwords\n\njoined.withColumn(\"len\", length($\"password\")).select($\"plainpassword\", $\"len\".as[String], $\"count\").createOrReplaceTempView(\"joined\")",
       "user": "admin",
-      "dateUpdated": "Apr 20, 2018 5:59:18 PM",
+      "dateUpdated": "Apr 23, 2018 2:38:57 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 93.0,
+              "optionOpen": false
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1524274593734_-1975751911",
+      "id": "20180420-183633_745434937",
+      "dateCreated": "Apr 20, 2018 6:36:33 PM",
+      "dateStarted": "Apr 23, 2018 12:18:22 PM",
+      "dateFinished": "Apr 23, 2018 12:19:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql\nselect \nlen,\nsum(count) as count\nfrom joined \nwhere plainpassword like \"%${plainpassword\u003dchicago}%\"\ngroup by len\norder by len",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "sql"
+        },
+        "editorMode": "ace/mode/sql",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {
+          "plainpassword": "chicago"
+        },
+        "forms": {
+          "plainpassword": {
+            "name": "plainpassword",
+            "defaultValue": "chicago",
+            "hidden": false
+          }
+        }
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "len\tcount\n7\t69253\n8\t85429\n9\t18901\n10\t4051\n11\t1691\n12\t2464\n17\t27\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524274604623_-1022698238",
+      "id": "20180420-183644_892036041",
+      "dateCreated": "Apr 20, 2018 6:36:44 PM",
+      "dateStarted": "Apr 23, 2018 12:22:41 PM",
+      "dateFinished": "Apr 23, 2018 12:23:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// find most common lengths of pwned passwords\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n  )\n  .groupBy($\"len\")\n  .agg(sum($\"count\").as(\"count\"))\n  .orderBy(desc(\"count\"))\n  .collect()\n\n// find most common character of pwned passwords",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -438,7 +387,261 @@
         "editorSetting": {
           "language": "scala"
         },
-        "editorMode": "ace/mode/scala"
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.Row\nres33: Array[org.apache.spark.sql.Row] \u003d Array([6,290224129], [8,207282634], [7,155550242], [9,70927347], [10,37402710], [5,29768532], [4,25224710], [11,5341827], [3,4961682], [12,3542702], [13,804854], [14,346747], [16,271147], [15,196750], [18,110927], [20,66273], [1,33864], [17,29398], [19,22536], [26,4123], [21,1584], [27,895], [22,795], [24,261], [23,169], [25,51])\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524194099960_1158936031",
+      "id": "20180419-201459_703665564",
+      "dateCreated": "Apr 19, 2018 8:14:59 PM",
+      "dateStarted": "Apr 23, 2018 12:19:03 PM",
+      "dateFinished": "Apr 23, 2018 12:20:19 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// why are there so many 26 character passwords?\n\nimport org.apache.spark.sql.Row\n\njoined.select(\n    $\"plainpassword\",\n    length($\"plainpassword\").as(\"len\"),\n    $\"count\"\n)\n.where($\"len\" \u003d\u003d\u003d 26)\n.show() \n",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.Row\n+--------------------+---+-----+\n|       plainpassword|len|count|\n+--------------------+---+-----+\n|qwertyuiopasdfghj...| 26| 3179|\n|qazwsxedcrfvtgbyh...| 26|  622|\n|zxcvbnmasdfghjklq...| 26|  229|\n|12345678912345678...| 26|   33|\n|ybxnjytbcnbyfbdct...| 26|   19|\n|vlad_ohotnickvlad...| 26|   15|\n|zstarchenkovazsta...| 26|   14|\n|vygodner322332322...| 26|   12|\n+--------------------+---+-----+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524194982793_-276892669",
+      "id": "20180419-202942_724505647",
+      "dateCreated": "Apr 19, 2018 8:29:42 PM",
+      "dateStarted": "Apr 23, 2018 12:19:31 PM",
+      "dateFinished": "Apr 23, 2018 12:20:47 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// show schema inference from csvs or json\n// how many people are basing passwords off of company names?\n\nval companies \u003d spark\n  .read\n  .option(\"header\", \"true\")\n  .option(\"inferSchema\", \"true\")\n  .csv(\"./code/password-data/helper-data/fortune500.csv\")\n\ndef companyKeyword \u003d udf((company: String) \u003d\u003e {\n  company.split(\" \").head.toLowerCase\n})\n\nval companyKeys \u003d companies.withColumn(\"keyword\", companyKeyword($\"company\"))\n\ncompanyKeys.join(\n    joined,\n    joined(\"plainpassword\").contains(companyKeys(\"keyword\"))\n  )\n  .select($\"plainpassword\", $\"keyword\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 1:02:02 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "companies: org.apache.spark.sql.DataFrame \u003d [lon: double, lat: double ... 5 more fields]\ncompanyKeyword: org.apache.spark.sql.expressions.UserDefinedFunction\ncompanyKeys: org.apache.spark.sql.DataFrame \u003d [lon: double, lat: double ... 6 more fields]\n+-------------+---------+------+\n|plainpassword|  keyword| count|\n+-------------+---------+------+\n|        apple|    apple|221030|\n|       google|   google|102637|\n|       apple1|    apple| 91055|\n|       apples|    apple| 86552|\n|      google1|   google| 76296|\n|     apple123|    apple| 53936|\n|      apples1|    apple| 52062|\n|    microsoft|microsoft| 47531|\n|      general|  general| 39319|\n|      general|  general| 39319|\n|    pineapple|    apple| 36739|\n|     fordf150|     ford| 36589|\n|      freddie|  freddie| 34439|\n|    google123|   google| 27306|\n|     clifford|     ford| 26046|\n|   pineapple1|    apple| 24383|\n|       target|   target| 24016|\n|       homer1|     home| 23799|\n|     applepie|    apple| 22855|\n|       oxford|     ford| 21040|\n+-------------+---------+------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524196898878_-145549919",
+      "id": "20180419-210138_1182407785",
+      "dateCreated": "Apr 19, 2018 9:01:38 PM",
+      "dateStarted": "Apr 23, 2018 1:02:02 PM",
+      "dateFinished": "Apr 23, 2018 1:02:52 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// they\u0027re good dogs, Brent\n\nval doggos \u003d spark.read.json(\"./code/password-data/helper-data/dogs.json\")\n\ndoggos.select($\"name\").where($\"sex\" \u003d\u003d\u003d \"female\").show()",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "doggos: org.apache.spark.sql.DataFrame \u003d [name: string, sex: string]\n+------+\n|  name|\n+------+\n| Bella|\n|  Lucy|\n| Daisy|\n|  Lola|\n|  Luna|\n| Molly|\n| Sadie|\n|Sophie|\n|Bailey|\n|Maggie|\n+------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524199335106_694233216",
+      "id": "20180419-214215_1514124042",
+      "dateCreated": "Apr 19, 2018 9:42:15 PM",
+      "dateStarted": "Apr 23, 2018 12:40:40 PM",
+      "dateFinished": "Apr 23, 2018 12:40:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// 12/10 will use for every password.\n\ndoggos.join(\n    joined,\n    joined(\"plainpassword\").contains(doggos(\"name\"))\n  )\n  .select($\"plainpassword\", $\"name\", $\"count\")\n  .orderBy(desc(\"count\"))\n  .show()",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 1:03:29 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------------+-------+-----+\n|plainpassword|   name|count|\n+-------------+-------+-----+\n|      Charlie|Charlie|15317|\n|     Charlie1|Charlie|12038|\n|       Bailey| Bailey|11589|\n|       Maggie| Maggie| 9962|\n|      Jackson|   Jack| 8727|\n|       Sophie| Sophie| 8526|\n|     Jackson1|   Jack| 5937|\n|       Cooper| Cooper| 5205|\n|       Jackie|   Jack| 4272|\n|       Tucker| Tucker| 4245|\n|      Maxwell|    Max| 3873|\n|         Jack|   Jack| 3607|\n|       Buddy1|  Buddy| 3320|\n|     Maxwell1|    Max| 3220|\n|        Bella|  Bella| 3007|\n|     Jackson5|   Jack| 3006|\n|      Maximus|    Max| 2969|\n|        Rocky|  Rocky| 2871|\n|   Maximilian|    Max| 2830|\n|      Bailey1| Bailey| 2800|\n+-------------+-------+-----+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524199047105_1426999269",
+      "id": "20180419-213727_339744891",
+      "dateCreated": "Apr 19, 2018 9:37:27 PM",
+      "dateStarted": "Apr 23, 2018 1:03:29 PM",
+      "dateFinished": "Apr 23, 2018 1:04:17 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val dictWords \u003d spark.read.textFile(\"./code/password-data/helper-data/dictionary.txt\")\n\nval dictMapped \u003d dictWords.map { dw \u003d\u003e (dw, hash(dw)) }\n    .withColumnRenamed(\"_1\", \"dictWord\")\n    .withColumnRenamed(\"_2\", \"hashed\")\n    \nval pwnedWords \u003d dictMapped.join(\n    pwnedpasswords,\n    dictMapped(\"hashed\") \u003d\u003d\u003d pwnedpasswords(\"pwnedhash\")\n)\n\nval numWords \u003d dictWords.count()\nval numPwned \u003d pwnedWords.count()\n\nprintln(s\"Percent pwned: ${(numPwned.toDouble / numWords.toDouble) * 100}%\")",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "dictWords: org.apache.spark.sql.Dataset[String] \u003d [value: string]\ndictMapped: org.apache.spark.sql.DataFrame \u003d [dictWord: string, hashed: string]\npwnedWords: org.apache.spark.sql.DataFrame \u003d [dictWord: string, hashed: string ... 2 more fields]\nnumWords: Long \u003d 370099\nnumPwned: Long \u003d 106417\nPercent pwned: 28.75365780507378%\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524369905373_-1703106508",
+      "id": "20180421-210505_1369203293",
+      "dateCreated": "Apr 21, 2018 9:05:05 PM",
+      "dateStarted": "Apr 23, 2018 12:21:36 PM",
+      "dateFinished": "Apr 23, 2018 12:22:40 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val safeWords \u003d dictMapped.join(\n    pwnedpasswords,\n    dictMapped(\"hashed\") \u003d\u003d\u003d pwnedpasswords(\"pwnedhash\"),\n    \"left_anti\"\n)\n\nsafeWords.sample(true, 0.001).select($\"dictWord\").show()",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "safeWords: org.apache.spark.sql.DataFrame \u003d [dictWord: string, hashed: string]\n+---------------+\n|       dictWord|\n+---------------+\n|     unexpended|\n|supersaturation|\n|  solidungulate|\n|   semaphorical|\n|  thermophilous|\n|     balneation|\n|         uppent|\n|     alfridaric|\n| equiexcellency|\n|       ballised|\n|    cenotaphies|\n|      humanises|\n|       alligate|\n|    odontoscope|\n|     altisonant|\n|  gymnospermous|\n|   malimprinted|\n|    ditrematous|\n|          ratwa|\n|       sicklied|\n+---------------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524370312438_128279644",
+      "id": "20180421-211152_1404634598",
+      "dateCreated": "Apr 21, 2018 9:11:52 PM",
+      "dateStarted": "Apr 23, 2018 12:22:24 PM",
+      "dateFinished": "Apr 23, 2018 12:23:02 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\n\n\n\n\n\n\n\n\n\n",
+      "user": "admin",
+      "dateUpdated": "Apr 23, 2018 12:51:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
       },
       "settings": {
         "params": {},
@@ -453,7 +656,7 @@
       "progressUpdateIntervalMs": 500
     }
   ],
-  "name": "Analyzing pwned passwords",
+  "name": "Analyzing pwned passwords - complete",
   "id": "2DAANS78Z",
   "angularObjects": {
     "2DD5Z2CQF:shared_process": [],
@@ -477,7 +680,7 @@
     "2DCNBJC7M:shared_process": []
   },
   "config": {
-    "looknfeel": "default",
+    "looknfeel": "simple",
     "personalizedMode": "false"
   },
   "info": {}

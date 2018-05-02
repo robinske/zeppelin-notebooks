@@ -1,0 +1,303 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._\nimport sqlContext.implicits._\nimport org.apache.spark.sql.types.IntegerType\nimport org.apache.spark.sql.Row",
+      "user": "admin",
+      "dateUpdated": "Apr 26, 2018 12:01:38 PM",
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "results": {},
+        "enabled": true,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._\nimport sqlContext.implicits._\nimport org.apache.spark.sql.types.IntegerType\nimport org.apache.spark.sql.Row\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524528296429_-2057885631",
+      "id": "20180423-142619_1442223214",
+      "dateCreated": "Apr 23, 2018 5:04:56 PM",
+      "dateStarted": "Apr 26, 2018 12:01:38 PM",
+      "dateFinished": "Apr 26, 2018 12:01:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val badwords \u003d spark.read.textFile(\"./badwords.txt\")\n\nval passwords \u003d spark\n    .read\n    .option(\"header\", \"true\")\n    .option(\"inferSchema\", \"true\")\n    .csv(\"./passwords/*\")\n    .join(badwords, $\"password\".contains(badwords(\"value\")), \"left_anti\")\n\npasswords\n    .orderBy($\"count\".desc)\n    .show()",
+      "user": "admin",
+      "dateUpdated": "Apr 26, 2018 3:03:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "badwords: org.apache.spark.sql.Dataset[String] \u003d [value: string]\npasswords: org.apache.spark.sql.DataFrame \u003d [password: string, hash: string ... 1 more field]\n+----------+--------------------+--------+\n|  password|                hash|   count|\n+----------+--------------------+--------+\n|    123456|7C4A8D09CA3762AF6...|20760336|\n| 123456789|F7C3BC1D808E04732...| 7016669|\n|    qwerty|B1B3773A05C0ED017...| 3599486|\n|  password|5BAA61E4C9B93F3F0...| 3303003|\n|    111111|3D4F2BF07DC1BE38B...| 2900049|\n|  12345678|7C222FB2927D828AF...| 2680521|\n|    abc123|6367C48DD193D56EA...| 2670319|\n| password1|E38AD214943DAAD1D...| 2310111|\n|   1234567|20EABE5D64B0E2167...| 2298084|\n|     12345|8CB2237D0679CA88D...| 2088998|\n|1234567890|01B307ACBA4F54F55...| 2075018|\n|    123123|601F1889667EFAEBB...| 2048411|\n|    000000|C984AED014AEC7623...| 1832944|\n|  iloveyou|EE8D8728F435FD550...| 1462146|\n|      1234|7110EDA4D09E062AA...| 1143408|\n|1q2w3e4r5t|B80A9AED8AF17118E...| 1109333|\n|qwertyuiop|B0399D2029F64D445...| 1028295|\n|       123|40BD001563085FC35...|  977827|\n|    monkey|AB87D24BDC7452E55...|  932064|\n|   123456a|360E46F15F432AF83...|  928360|\n+----------+--------------------+--------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524615276672_-1311736851",
+      "id": "20180424-191436_1157653369",
+      "dateCreated": "Apr 24, 2018 7:14:36 PM",
+      "dateStarted": "Apr 26, 2018 3:03:23 PM",
+      "dateFinished": "Apr 26, 2018 3:03:27 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "passwords.withColumn(\"len\", length($\"password\"))\n    .createOrReplaceTempView(\"passwords\")",
+      "user": "admin",
+      "dateUpdated": "Apr 26, 2018 3:05:03 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1524769340667_-329480810",
+      "id": "20180426-140220_1619291343",
+      "dateCreated": "Apr 26, 2018 2:02:20 PM",
+      "dateStarted": "Apr 26, 2018 3:05:03 PM",
+      "dateFinished": "Apr 26, 2018 3:05:03 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%sql \n\nSELECT\nlen,\nsum(count) as count\nFROM\npasswords\nWHERE\npassword like \"%${password\u003dchicago}%\"\nGROUP BY len\nORDER BY len",
+      "user": "admin",
+      "dateUpdated": "Apr 26, 2018 3:06:45 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "sql"
+        },
+        "editorMode": "ace/mode/sql"
+      },
+      "settings": {
+        "params": {
+          "password": "scala"
+        },
+        "forms": {
+          "password": {
+            "name": "password",
+            "defaultValue": "chicago",
+            "hidden": false
+          }
+        }
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "len\tcount\n5\t383\n6\t1153\n7\t371\n8\t8451\n9\t1866\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524615276367_1624682079",
+      "id": "20180424-191436_181643674",
+      "dateCreated": "Apr 24, 2018 7:14:36 PM",
+      "dateStarted": "Apr 26, 2018 3:06:45 PM",
+      "dateFinished": "Apr 26, 2018 3:06:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val doggos \u003d spark.read.json(\"./doggos.json\")\n\ndef lowercase \u003d udf((s: String) \u003d\u003e {\n    s.toLowerCase\n})\n\ndoggos.join(passwords, passwords(\"password\").contains(lowercase(doggos(\"name\"))))\n    .select($\"name\", $\"password\", $\"count\")\n    .orderBy($\"count\".desc)\n    .show()",
+      "user": "admin",
+      "dateUpdated": "Apr 26, 2018 3:10:24 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "doggos: org.apache.spark.sql.DataFrame \u003d [food: string, name: string ... 1 more field]\nlowercase: org.apache.spark.sql.expressions.UserDefinedFunction\n+-------+---------+------+\n|   name| password| count|\n+-------+---------+------+\n|Charlie|  charlie|278516|\n|Charlie| charlie1|198980|\n| Maggie|   maggie|188539|\n| Sophie|   sophie|149206|\n| Bailey|   bailey|145918|\n|   Jack|  jackson|128263|\n|  Buddy|   buddy1|125085|\n| Maggie|  maggie1|106376|\n|   Jack| jackson1| 92313|\n|  Rocky|   rocky1| 91975|\n|   Jack|   jackie| 87467|\n| Cooper|   cooper| 86531|\n|   Bear| poohbear| 85938|\n| Bailey|  bailey1| 84698|\n|  Bella| isabella| 81340|\n|  Molly|   molly1| 76989|\n|    Max|  maxwell| 74720|\n|   Bear|poohbear1| 73556|\n|   Jack| jackass1| 73372|\n|   Jack|  jackass| 68871|\n+-------+---------+------+\nonly showing top 20 rows\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524615276199_1590824175",
+      "id": "20180424-191436_281985408",
+      "dateCreated": "Apr 24, 2018 7:14:36 PM",
+      "dateStarted": "Apr 26, 2018 3:10:24 PM",
+      "dateFinished": "Apr 26, 2018 3:10:28 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "admin",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524611634663_-188342503",
+      "id": "20180424-181354_1799517130",
+      "dateCreated": "Apr 24, 2018 6:13:54 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "admin",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524539510166_-604970704",
+      "id": "20180423-201150_628298068",
+      "dateCreated": "Apr 23, 2018 8:11:50 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 23, 2018 5:04:56 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524528296431_-2057116133",
+      "id": "20180423-163651_1136065797",
+      "dateCreated": "Apr 23, 2018 5:04:56 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Apr 23, 2018 5:04:56 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524528296431_-2057116133",
+      "id": "20180423-163650_2000226525",
+      "dateCreated": "Apr 23, 2018 5:04:56 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+      "dateUpdated": "Apr 23, 2018 5:04:56 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "scala"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524528296431_-2057116133",
+      "id": "20180423-142613_502143977",
+      "dateCreated": "Apr 23, 2018 5:04:56 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Analyzing pwned passwords - GOTO Chicago",
+  "id": "2DDVAB6H8",
+  "angularObjects": {
+    "2DD5Z2CQF:shared_process": [],
+    "2DD1YZ5BZ:shared_process": [],
+    "2DD3K4GH4:shared_process": [],
+    "2DAZHT7T8:shared_process": [],
+    "2DCUV1QMZ:shared_process": [],
+    "2D9R1U1F8:shared_process": [],
+    "2D9MVRRX1:shared_process": [],
+    "2DAYABNT9:shared_process": [],
+    "2DC98962R:shared_process": [],
+    "2DBCJ97ZQ:shared_process": [],
+    "2D9MB1JK5:shared_process": [],
+    "2DC56VZGJ:shared_process": [],
+    "2DCG8R32M:shared_process": [],
+    "2D9EWAGHA:shared_process": [],
+    "2DC4TSD6W:shared_process": [],
+    "2DAGM9T8D:shared_process": [],
+    "2DAMEA9WN:shared_process": [],
+    "2DACV72J4:shared_process": [],
+    "2DCNBJC7M:shared_process": []
+  },
+  "config": {
+    "looknfeel": "simple",
+    "personalizedMode": "false"
+  },
+  "info": {}
+}

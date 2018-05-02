@@ -1,0 +1,181 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.types.IntegerType",
+      "dateUpdated": "Apr 23, 2018 4:36:55 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "scala"
+        },
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.{DataFrame, Dataset}\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.types.IntegerType\nbadwords: org.apache.spark.sql.DataFrame \u003d [value: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526589634_666868329",
+      "id": "20180423-142619_1442223214",
+      "dateCreated": "Apr 23, 2018 4:36:29 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "",
+      "dateUpdated": "Apr 23, 2018 4:36:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526589638_665329334",
+      "id": "20180423-150744_439306077",
+      "dateCreated": "Apr 23, 2018 4:36:29 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "admin",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526613316_-867663526",
+      "id": "20180423-163653_407040618",
+      "dateCreated": "Apr 23, 2018 4:36:53 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "admin",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526612928_-619885234",
+      "id": "20180423-163652_2107523253",
+      "dateCreated": "Apr 23, 2018 4:36:52 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "admin",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526612452_1105882148",
+      "id": "20180423-163652_848315686",
+      "dateCreated": "Apr 23, 2018 4:36:52 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "admin",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526611966_1306721074",
+      "id": "20180423-163651_1136065797",
+      "dateCreated": "Apr 23, 2018 4:36:51 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "admin",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526610433_1587203022",
+      "id": "20180423-163650_2000226525",
+      "dateCreated": "Apr 23, 2018 4:36:50 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+      "dateUpdated": "Apr 23, 2018 4:36:48 PM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "scala"
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1524526589640_663020840",
+      "id": "20180423-142613_502143977",
+      "dateCreated": "Apr 23, 2018 4:36:29 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Analyzing pwned passwords - starting template",
+  "id": "2DCFAXW1M",
+  "angularObjects": {
+    "2DD5Z2CQF:shared_process": [],
+    "2DD1YZ5BZ:shared_process": [],
+    "2DD3K4GH4:shared_process": [],
+    "2DAZHT7T8:shared_process": [],
+    "2DCUV1QMZ:shared_process": [],
+    "2D9R1U1F8:shared_process": [],
+    "2D9MVRRX1:shared_process": [],
+    "2DAYABNT9:shared_process": [],
+    "2DC98962R:shared_process": [],
+    "2DBCJ97ZQ:shared_process": [],
+    "2D9MB1JK5:shared_process": [],
+    "2DC56VZGJ:shared_process": [],
+    "2DCG8R32M:shared_process": [],
+    "2D9EWAGHA:shared_process": [],
+    "2DC4TSD6W:shared_process": [],
+    "2DAGM9T8D:shared_process": [],
+    "2DAMEA9WN:shared_process": [],
+    "2DACV72J4:shared_process": [],
+    "2DCNBJC7M:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}
